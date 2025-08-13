@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 let registros = [];
 
 app.use(express.json());
-app.use(express.static("public")); // Servir el HTML
+app.use(express.static("public")); // Carpeta para servir el HTML, CSS, JS
 
 // Guardar datos del formulario
 app.post("/registrar", (req, res) => {
@@ -28,6 +28,7 @@ app.get("/descargar-excel", (req, res) => {
   res.download(filePath);
 });
 
+// Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor en puerto ${PORT}`);
 });
