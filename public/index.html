@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 350px;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    label {
+      display: block;
+      text-align: left;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #444;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      transition: 0.3s;
+    }
+    input:focus {
+      border-color: #4facfe;
+      box-shadow: 0 0 5px #4facfe;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #4facfe;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #3a8de0;
+    }
+    .footer {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Registro de Asistencia</h2>
+    <form id="registroForm">
+      <label>Nombre Completo:</label>
+      <input type="text" name="nombre" required>
+
+      <label>Código:</label>
+      <input type="text" name="codigo" required>
+
+      <button type="submit">Registrar</button>
+    </form>
+    <div class="footer">
+      &copy; 2025 Sistema de Registro QR
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("registroForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      navigator.geolocation.getCurrentPosition(pos => {
+        const data = {
+          nombre: e.target.nombre.value,
+          codigo: e.target.codigo.value,
+          hora: new Date().toLocaleString(),
+          ubicacion: `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`
+        };
+
+        fetch("/registrar", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(data)
+        }).then(res => {
+          alert("Registro guardado con éxito ✅");
+          e.target.reset();
+        });
+      }, () => {
+        alert("No se pudo obtener la ubicación ❌");
+      });
+    });
+  </script>
+</body>
+</html>
